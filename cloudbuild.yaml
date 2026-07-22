@@ -1,0 +1,88 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+
+steps:
+
+
+#######################################################
+#
+# BUILD DOCKER IMAGE
+#
+#######################################################
+
+- name: 'gcr.io/cloud-builders/docker'
+
+  args:
+
+    - 'build'
+
+    - '-t'
+
+    - 'europe-west1-docker.pkg.dev/$PROJECT_ID/performance-europe/performance-test:latest'
+
+    - '.'
+
+
+
+#######################################################
+#
+# TAG IMAGE FOR US REGISTRY
+#
+#######################################################
+
+- name: 'gcr.io/cloud-builders/docker'
+
+  args:
+
+    - 'tag'
+
+    - 'europe-west1-docker.pkg.dev/$PROJECT_ID/performance-europe/performance-test:latest'
+
+    - 'us-west1-docker.pkg.dev/$PROJECT_ID/performance-usa/performance-test:latest'
+
+
+
+#######################################################
+#
+# PUSH EUROPE IMAGE
+#
+#######################################################
+
+- name: 'gcr.io/cloud-builders/docker'
+
+  args:
+
+    - 'push'
+
+    - 'europe-west1-docker.pkg.dev/$PROJECT_ID/performance-europe/performance-test:latest'
+
+
+
+#######################################################
+#
+# PUSH USA IMAGE
+#
+#######################################################
+
+- name: 'gcr.io/cloud-builders/docker'
+
+  args:
+
+    - 'push'
+
+    - 'us-west1-docker.pkg.dev/$PROJECT_ID/performance-usa/performance-test:latest'
+
+
+
+#######################################################
+#
+# IMAGES
+#
+#######################################################
+
+images:
+
+- 'europe-west1-docker.pkg.dev/$PROJECT_ID/performance-europe/performance-test:latest'
+
+- 'us-west1-docker.pkg.dev/$PROJECT_ID/performance-usa/performance-test:latest'
